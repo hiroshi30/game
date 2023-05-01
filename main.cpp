@@ -2,28 +2,30 @@
 #include <cstdlib>
 #include <cstdio>
 
-// #include "block.hpp"
-// #include "camera.hpp"
+#include "block.hpp"
+#include "camera.hpp"
 
 const int window_width = 500;
-const int window_height = 500
+const int window_height = 500;
 
-int** create_map(int width, int height) {
-    float rnd;
-
-    int** arr;
-
-    arr = new int*[height];
+int** create_map(int width, int height, int count) {
+    int** arr = new int*[height];
     for (int h = 0; h < height; ++h) {
         arr[h] = new int[width];
         for (int w = 0; w < width; ++w) {
-            rnd = std::rand() % 100;
-            rnd = rnd / 100;
-            if (rnd > 0.75)
-                arr[h][w] = 1;
-            else
-                arr[h][w] = 0;
+            arr[h][w] = 0;
         }
+    }
+
+    int x, y;
+    for (int i = 0; i < count; ++i) {
+        y = std::rand() % height;
+        x = std::rand() % width;
+        while (arr[y][x] == 1 and i < width * height) {
+            y = std::rand() % height;
+            x = std::rand() % width;
+        }
+        arr[y][x] = 1;
     }
 
     return arr;
@@ -31,66 +33,92 @@ int** create_map(int width, int height) {
 
 
 
-int main() {
+int main(int argc, char *argv[]) {
 
-    int** map = create_map(window_width / block_width, window_height / block_height);
+    SDL_Init(SDL_INIT_VIDEO);
 
+    SDL_Window *window = SDL_CreateWindow("test", 100, 100, window_width, window_height, SDL_WINDOW_SHOWN);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    int** map = create_map(window_width / block_width, window_height / block_height, 10);
     Camera camera = Camera(window_width / 2, window_height / 2);
+
+
+    int len = 0;
 
     printf("{\n");
     for (int h = 0; h < window_height / block_height; ++h) {
         printf("    {");
         for (int w = 0; w < window_width / block_width; ++w) {
             printf("%i, ", map[h][w]);
+            if (map[h][w] == 1) len += 1;
         }
         printf("},\n");
     }
     printf("}\n");
 
-    sf::RenderWindow window(sf::VideoMode(window_width, window_height), "SFML works!");
+    Block arr[len];
+    int index = 0;
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Escape) {
-                    window.close();
-                }
-                if (event.key.code == sf::Keyboard::W) {
-                    camera.move_forward();
-                }
-                if (event.key.code == sf::Keyboard::S) {
-                    camera.move_backward();
-                }
-                if (event.key.code == sf::Keyboard::D) {
-                    camera.move_right();
-                }
-                if (event.key.code == sf::Keyboard::A) {
-                    camera.move_left();
-                }
+    for (int h = 0; h < window_height / block_height; ++h) {
+        for (int w = 0; w < window_width / block_width; ++w) {
+            if (map[h][w] == 1) {
+                arr[index] = Block(w * block_width, h * block_height);
+                ++index;
             }
         }
-
-        window.clear();
-
-        for (int h = 0; h < window_height / block_height; ++h) {
-            for (int w = 0; w < window_width / block_width; ++w) {
-                if (map[h][w] == 1) {
-                    Block block = Block(w * block_width, h * block_height);
-                    window.draw(block.rect);
-                }
-            }
-        }
-
-        camera.update();
-        window.draw(camera.circle);
-
-        window.display();
     }
+
+    SDL_Event event;
+    bool go = true;
+    bool update = true;
+
+    const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
+
+    while(go) {
+        while(SDL_PollEvent(&event) != 0) {
+            if(event.type == SDL_QUIT) {
+                go = false;
+            }
+
+            if(keyboardState[SDL_SCANCODE_W]) {
+                camera.move_forward();
+                update = true;
+            }
+                            
+            if(keyboardState[SDL_SCANCODE_S]) {
+                camera.move_backward();
+                update = true;
+            }
+
+            if(keyboardState[SDL_SCANCODE_A]) {
+                camera.move_left();
+                update = true;
+            }
+
+            if(keyboardState[SDL_SCANCODE_D]) {
+                camera.move_right();
+                update = true;
+            }
+        }
+
+        if (update) {
+            SDL_RenderClear(renderer);
+            
+            for (int i = 0; i < len; ++i) {
+                arr[i].draw(renderer);
+            }
+
+            camera.draw(renderer);
+
+            SDL_RenderPresent(renderer);
+        }
+    }
+
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
 
     for (int h = 0; h < window_height / block_height; ++h) {
         delete [] map[h];
