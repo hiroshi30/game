@@ -8,6 +8,15 @@
 const int window_width = 500;
 const int window_height = 500;
 
+int[2] ray_casting(int x0, int y0, int angelx) {
+    int[2] coords;
+    if (anglex > 270 or (angelx > 0 and angelx < 90)) {
+
+    }
+
+    return coords;
+} 
+
 int** create_map(int width, int height, int count) {
     int** arr = new int*[height];
     for (int h = 0; h < height; ++h) {
@@ -110,8 +119,12 @@ int main(int argc, char *argv[]) {
             }
 
             camera.draw(renderer);
+            camera.draw_line(renderer);
 
             SDL_RenderPresent(renderer);
+
+            update = false;
+            printf("update completes\n");
         }
     }
 

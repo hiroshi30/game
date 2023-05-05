@@ -38,3 +38,9 @@ const void Camera::draw(SDL_Renderer *renderer) {
     }
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
+
+const void Camera::draw_line(SDL_Renderer *renderer, int x2, int y2) {
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	SDL_RenderDrawLine(renderer, x, y, 0, 0);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+}

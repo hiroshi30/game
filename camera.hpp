@@ -16,4 +16,5 @@ public:
 	void move_right();
 	void move_left();
 	const void draw(SDL_Renderer *renderer);
+	const void draw_line(SDL_Renderer *renderer);
 };
