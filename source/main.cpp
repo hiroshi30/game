@@ -1,40 +1,27 @@
 #include <SDL2/SDL.h>
 #include <cstdlib>
-#include <cstdio>
+#include <iostream>
 
 #include "block.hpp"
 #include "camera.hpp"
+// #include "ray_casting.hpp"
 
 const int window_width = 500;
 const int window_height = 500;
 
-// int[2] ray_casting(int x0, int y0, int angelx) {
-//     int[2] coords;
-//     if (anglex > 270 or (angelx > 0 and angelx < 90)) {
-
-//     }
-
-//     return coords;
-// } 
 
 int** create_map(int width, int height, int count) {
-    int** arr = new int*[height];
-    for (int h = 0; h < height; ++h) {
-        arr[h] = new int[width];
-        for (int w = 0; w < width; ++w) {
-            arr[h][w] = 0;
-        }
+    int** arr = new int*[count];
+    for (int i = 0; i < count; ++i) {
+        arr[i] = new int[2];
     }
 
     int x, y;
     for (int i = 0; i < count; ++i) {
         y = std::rand() % height;
         x = std::rand() % width;
-        while (arr[y][x] == 1 and i < width * height) {
-            y = std::rand() % height;
-            x = std::rand() % width;
-        }
-        arr[y][x] = 1;
+        arr[i][0] = x;
+        arr[i][1] = y;
     }
 
     return arr;
@@ -42,40 +29,21 @@ int** create_map(int width, int height, int count) {
 
 
 
-int main(int argc, char *argv[]) {
+int main(int argv, char** args) {
 
     SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_Window *window = SDL_CreateWindow("test", 100, 100, window_width, window_height, SDL_WINDOW_SHOWN);
+    SDL_Window *window = SDL_CreateWindow("ray_casting", 100, 100, window_width, window_height, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    int** map = create_map(window_width / block_width, window_height / block_height, 10);
+    const int count = 10;
+
+    int** map = create_map(window_width / block_width, window_height / block_height, count);
     Camera camera = Camera(window_width / 2, window_height / 2);
 
-
-    int len = 0;
-
-    printf("{\n");
-    for (int h = 0; h < window_height / block_height; ++h) {
-        printf("    {");
-        for (int w = 0; w < window_width / block_width; ++w) {
-            printf("%i, ", map[h][w]);
-            if (map[h][w] == 1) len += 1;
-        }
-        printf("},\n");
-    }
-    printf("}\n");
-
-    Block arr[len];
-    int index = 0;
-
-    for (int h = 0; h < window_height / block_height; ++h) {
-        for (int w = 0; w < window_width / block_width; ++w) {
-            if (map[h][w] == 1) {
-                arr[index] = Block(w * block_width, h * block_height);
-                ++index;
-            }
-        }
+    Block blocks[count];
+    for (int i = 0; i < count; ++i) {
+        blocks[i] = Block(map[i][0] * block_width, map[i][1] * block_height);
     }
 
     SDL_Event event;
@@ -83,11 +51,18 @@ int main(int argc, char *argv[]) {
     bool update = true;
 
     const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
+    SDL_SetRelativeMouseMode(SDL_TRUE);
 
     while(go) {
         while(SDL_PollEvent(&event) != 0) {
-            if(event.type == SDL_QUIT) {
+            if(event.type == SDL_QUIT or keyboardState[SDL_SCANCODE_ESCAPE]) {
                 go = false;
+            }
+
+            if(event.type == SDL_MOUSEMOTION) {
+                camera.turn(event.motion.xrel, event.motion.yrel);
+                // std::cout << event.motion.xrel << ' ' << event.motion.yrel << std::endl;
+                update = true;
             }
 
             if(keyboardState[SDL_SCANCODE_W]) {
@@ -114,17 +89,25 @@ int main(int argc, char *argv[]) {
         if (update) {
             SDL_RenderClear(renderer);
             
-            for (int i = 0; i < len; ++i) {
-                arr[i].draw(renderer);
+            for (int i = 0; i < count; ++i) {
+                blocks[i].draw(renderer);
             }
 
             camera.draw(renderer);
-            camera.draw_line(renderer, 0, 0);
+            double* coords = camera.ray_casting(window_width, window_height);
+            camera.draw_line(renderer, coords[0], coords[1]);
+
+            // SDL_Vertex vertices[] = {
+            //     {{100, 100}, {255, 0, 0, 255}, {0}},
+            //     {{150, 200}, {255, 0, 0, 255}, {0}},
+            //     {{200, 100}, {255, 0, 0, 255}, {0}}
+            // };
+
+            // SDL_RenderGeometry(renderer, NULL, vertices, 3, NULL, 0);
 
             SDL_RenderPresent(renderer);
 
             update = false;
-            printf("update completes\n");
         }
     }
 
@@ -133,8 +116,8 @@ int main(int argc, char *argv[]) {
     SDL_DestroyWindow(window);
     SDL_Quit();
 
-    for (int h = 0; h < window_height / block_height; ++h) {
-        delete [] map[h];
+    for (int i = 0; i < count; ++i) {
+        delete [] map[i];
     }
     delete [] map;
     map = 0;

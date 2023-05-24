@@ -15,7 +15,7 @@ public:
 	SDL_Rect border;
 	Block() = default;
 	Block(int x, int y);
-	const void draw_rect(SDL_Renderer *renderer);
-	const void draw_border(SDL_Renderer *renderer);
-	const void draw(SDL_Renderer *renderer);
+	void draw_rect(SDL_Renderer *renderer);
+	void draw_border(SDL_Renderer *renderer);
+	void draw(SDL_Renderer *renderer);
 };

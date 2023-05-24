@@ -20,19 +20,19 @@ Block::Block(int set_x, int set_y) {
     border.h = height;
 };
 
-const void Block::draw_rect(SDL_Renderer *renderer) {
+void Block::draw_rect(SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(renderer, &rect);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
 
-const void Block::draw_border(SDL_Renderer *renderer) {
+void Block::draw_border(SDL_Renderer *renderer) {
     SDL_SetRenderDrawColor(renderer, 150, 150, 150, 255);
     SDL_RenderFillRect(renderer, &border);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
 
-const void Block::draw(SDL_Renderer *renderer) {
+void Block::draw(SDL_Renderer *renderer) {
     if (border_width > 0) draw_border(renderer);
 
     draw_rect(renderer);
