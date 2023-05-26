@@ -1,7 +1,9 @@
 #include <SDL2/SDL.h>
 
-const int block_width = 50;
-const int block_height = 50;
+#define block_width 50
+#define block_height 50
+
+#pragma once
 
 class Block {
 private:
@@ -18,4 +20,4 @@ public:
 	void draw_rect(SDL_Renderer *renderer);
 	void draw_border(SDL_Renderer *renderer);
 	void draw(SDL_Renderer *renderer);
-};
+};	

@@ -1,5 +1,7 @@
 #include <SDL2/SDL.h>
 
+#include "block.hpp"
+
 class Camera {
 private:
 	double x;
@@ -7,11 +9,10 @@ private:
 	double angle_x;
 	double angle_y;
 	double speed;
-
 	double radius;
 
 public:
-	Camera(int setX, int setY);
+	Camera(double set_x, double set_y);
 	void move_forward();
 	void move_backward();
 	void move_right();
@@ -19,5 +20,6 @@ public:
 	void draw(SDL_Renderer *renderer);
 	void draw_line(SDL_Renderer *renderer, double x1, double y1);
 	void turn(double x1, double y1);
-	double* ray_casting(int width, int height);
+	double* ray_casting();
+	double* ray_casting0(Block blocks[]);
 };

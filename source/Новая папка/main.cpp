@@ -4,29 +4,9 @@
 
 #include "block.hpp"
 #include "camera.hpp"
-// #include "ray_casting.hpp"
 
-const int window_width = 500;
-const int window_height = 500;
-
-
-int** create_map(int width, int height, int count) {
-    int** arr = new int*[count];
-    for (int i = 0; i < count; ++i) {
-        arr[i] = new int[2];
-    }
-
-    int x, y;
-    for (int i = 0; i < count; ++i) {
-        y = std::rand() % height;
-        x = std::rand() % width;
-        arr[i][0] = x;
-        arr[i][1] = y;
-    }
-
-    return arr;
-}
-
+#define window_width 500
+#define window_height 500
 
 
 int main(int argv, char** args) {
@@ -38,12 +18,13 @@ int main(int argv, char** args) {
 
     const int count = 10;
 
-    int** map = create_map(window_width / block_width, window_height / block_height, count);
     Camera camera = Camera(window_width / 2, window_height / 2);
-
     Block blocks[count];
+
     for (int i = 0; i < count; ++i) {
-        blocks[i] = Block(map[i][0] * block_width, map[i][1] * block_height);
+        int x = std::rand() % window_width / block_width;
+        int y = std::rand() % window_height / block_height;
+        blocks[i] = Block(x * block_width, y * block_height);
     }
 
     SDL_Event event;
@@ -94,7 +75,7 @@ int main(int argv, char** args) {
             }
 
             camera.draw(renderer);
-            double* coords = camera.ray_casting(window_width, window_height);
+            double* coords = camera.ray_casting();
             camera.draw_line(renderer, coords[0], coords[1]);
 
             // SDL_Vertex vertices[] = {
@@ -111,16 +92,9 @@ int main(int argv, char** args) {
         }
     }
 
-
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
-
-    for (int i = 0; i < count; ++i) {
-        delete [] map[i];
-    }
-    delete [] map;
-    map = 0;
 
     return 0;
 }
