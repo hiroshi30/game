@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 #include "camera.h"
 
@@ -12,6 +13,8 @@ int main(int argv, char** args) {
 
     SDL_Window *window = SDL_CreateWindow("ray_casting", 100, 100, window_width, window_height, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    printf("%d", tm_sec);
 
     struct Camera *camera = &(struct Camera) {
         .view_angle=120.0,

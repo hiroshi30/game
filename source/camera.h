@@ -26,4 +26,3 @@ void draw_line(SDL_Renderer *renderer, struct Camera *camera, double x1, double 
 void turn(struct Camera *camera, double x1, double y1);
 double* ray_casting(struct Camera *camera);
 double** vertex(struct Camera *camera, double vertices[][3]);
-// double* ray_casting0(Block blocks[]);
