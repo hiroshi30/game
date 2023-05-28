@@ -128,77 +128,53 @@ main/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/build
 .PHONY : main/fast
 
-block.obj: block.cpp.obj
-.PHONY : block.obj
-
-# target to build an object file
-block.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/block.cpp.obj
-.PHONY : block.cpp.obj
-
-block.i: block.cpp.i
-.PHONY : block.i
-
-# target to preprocess a source file
-block.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/block.cpp.i
-.PHONY : block.cpp.i
-
-block.s: block.cpp.s
-.PHONY : block.s
-
-# target to generate assembly for a file
-block.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/block.cpp.s
-.PHONY : block.cpp.s
-
-camera.obj: camera.cpp.obj
+camera.obj: camera.c.obj
 .PHONY : camera.obj
 
 # target to build an object file
-camera.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/camera.cpp.obj
-.PHONY : camera.cpp.obj
+camera.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/camera.c.obj
+.PHONY : camera.c.obj
 
-camera.i: camera.cpp.i
+camera.i: camera.c.i
 .PHONY : camera.i
 
 # target to preprocess a source file
-camera.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/camera.cpp.i
-.PHONY : camera.cpp.i
+camera.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/camera.c.i
+.PHONY : camera.c.i
 
-camera.s: camera.cpp.s
+camera.s: camera.c.s
 .PHONY : camera.s
 
 # target to generate assembly for a file
-camera.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/camera.cpp.s
-.PHONY : camera.cpp.s
+camera.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/camera.c.s
+.PHONY : camera.c.s
 
-main.obj: main.cpp.obj
+main.obj: main.c.obj
 .PHONY : main.obj
 
 # target to build an object file
-main.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/main.cpp.obj
-.PHONY : main.cpp.obj
+main.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/main.c.obj
+.PHONY : main.c.obj
 
-main.i: main.cpp.i
+main.i: main.c.i
 .PHONY : main.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/main.cpp.i
-.PHONY : main.cpp.i
+main.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/main.c.i
+.PHONY : main.c.i
 
-main.s: main.cpp.s
+main.s: main.c.s
 .PHONY : main.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/main.cpp.s
-.PHONY : main.cpp.s
+main.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\main.dir\build.make CMakeFiles/main.dir/main.c.s
+.PHONY : main.c.s
 
 # Help Target
 help:
@@ -209,9 +185,6 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... main
-	@echo ... block.obj
-	@echo ... block.i
-	@echo ... block.s
 	@echo ... camera.obj
 	@echo ... camera.i
 	@echo ... camera.s

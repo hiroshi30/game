@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_BUILD_TYPE "Release")
 
-set(SDL_PATH C:/SDL2-2.26.5/x86_64-w64-mingw32)
+set(SDL_PATH ../external/SDL2-2.26.5/x86_64-w64-mingw32)
 set(PROJECT_NAME main)
 
 add_compile_options(-Wall -Wextra -Wpedantic)
@@ -17,8 +17,8 @@ link_directories(${SDL_PATH}/lib)
 set(LIBRARIES SDL2main SDL2)
 set(DEPENDENCIES mingw32)
 
-project(${PROJECT_NAME} LANGUAGES CXX)
+project(${PROJECT_NAME} LANGUAGES C)
 
-add_executable(${PROJECT_NAME} main.cpp block.hpp block.cpp camera.hpp camera.cpp)
+add_executable(${PROJECT_NAME} main.c camera.h camera.c)
 
 target_link_libraries(${PROJECT_NAME} ${DEPENDENCIES} ${LIBRARIES})

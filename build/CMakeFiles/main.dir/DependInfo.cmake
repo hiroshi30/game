@@ -8,9 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "C:/Users/takayama/Desktop/sdl_project/source/block.cpp" "CMakeFiles/main.dir/block.cpp.obj" "gcc" "CMakeFiles/main.dir/block.cpp.obj.d"
-  "C:/Users/takayama/Desktop/sdl_project/source/camera.cpp" "CMakeFiles/main.dir/camera.cpp.obj" "gcc" "CMakeFiles/main.dir/camera.cpp.obj.d"
-  "C:/Users/takayama/Desktop/sdl_project/source/main.cpp" "CMakeFiles/main.dir/main.cpp.obj" "gcc" "CMakeFiles/main.dir/main.cpp.obj.d"
+  "C:/Users/takayama/Desktop/sdl_project/source/camera.c" "CMakeFiles/main.dir/camera.c.obj" "gcc" "CMakeFiles/main.dir/camera.c.obj.d"
+  "C:/Users/takayama/Desktop/sdl_project/source/main.c" "CMakeFiles/main.dir/main.c.obj" "gcc" "CMakeFiles/main.dir/main.c.obj.d"
   )
 
 # Targets to which this target links which contain Fortran sources.

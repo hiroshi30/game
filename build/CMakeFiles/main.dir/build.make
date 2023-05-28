@@ -68,68 +68,51 @@ include CMakeFiles/main.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/main.dir/flags.make
 
-CMakeFiles/main.dir/main.cpp.obj: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/main.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/main.cpp.obj: C:/Users/takayama/Desktop/sdl_project/source/main.cpp
-CMakeFiles/main.dir/main.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\takayama\Desktop\sdl_project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/main.dir/main.cpp.obj"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/main.cpp.obj -MF CMakeFiles\main.dir\main.cpp.obj.d -o CMakeFiles\main.dir\main.cpp.obj -c C:\Users\takayama\Desktop\sdl_project\source\main.cpp
+CMakeFiles/main.dir/main.c.obj: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/main.c.obj: CMakeFiles/main.dir/includes_C.rsp
+CMakeFiles/main.dir/main.c.obj: C:/Users/takayama/Desktop/sdl_project/source/main.c
+CMakeFiles/main.dir/main.c.obj: CMakeFiles/main.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\takayama\Desktop\sdl_project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building C object CMakeFiles/main.dir/main.c.obj"
+	C:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/main.dir/main.c.obj -MF CMakeFiles\main.dir\main.c.obj.d -o CMakeFiles\main.dir\main.c.obj -c C:\Users\takayama\Desktop\sdl_project\source\main.c
 
-CMakeFiles/main.dir/main.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/main.cpp.i"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\takayama\Desktop\sdl_project\source\main.cpp > CMakeFiles\main.dir\main.cpp.i
+CMakeFiles/main.dir/main.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/main.c.i"
+	C:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\takayama\Desktop\sdl_project\source\main.c > CMakeFiles\main.dir\main.c.i
 
-CMakeFiles/main.dir/main.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/main.cpp.s"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\takayama\Desktop\sdl_project\source\main.cpp -o CMakeFiles\main.dir\main.cpp.s
+CMakeFiles/main.dir/main.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/main.c.s"
+	C:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\takayama\Desktop\sdl_project\source\main.c -o CMakeFiles\main.dir\main.c.s
 
-CMakeFiles/main.dir/block.cpp.obj: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/block.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/block.cpp.obj: C:/Users/takayama/Desktop/sdl_project/source/block.cpp
-CMakeFiles/main.dir/block.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\takayama\Desktop\sdl_project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/main.dir/block.cpp.obj"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/block.cpp.obj -MF CMakeFiles\main.dir\block.cpp.obj.d -o CMakeFiles\main.dir\block.cpp.obj -c C:\Users\takayama\Desktop\sdl_project\source\block.cpp
+CMakeFiles/main.dir/camera.c.obj: CMakeFiles/main.dir/flags.make
+CMakeFiles/main.dir/camera.c.obj: CMakeFiles/main.dir/includes_C.rsp
+CMakeFiles/main.dir/camera.c.obj: C:/Users/takayama/Desktop/sdl_project/source/camera.c
+CMakeFiles/main.dir/camera.c.obj: CMakeFiles/main.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\takayama\Desktop\sdl_project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building C object CMakeFiles/main.dir/camera.c.obj"
+	C:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -MD -MT CMakeFiles/main.dir/camera.c.obj -MF CMakeFiles\main.dir\camera.c.obj.d -o CMakeFiles\main.dir\camera.c.obj -c C:\Users\takayama\Desktop\sdl_project\source\camera.c
 
-CMakeFiles/main.dir/block.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/block.cpp.i"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\takayama\Desktop\sdl_project\source\block.cpp > CMakeFiles\main.dir\block.cpp.i
+CMakeFiles/main.dir/camera.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/main.dir/camera.c.i"
+	C:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E C:\Users\takayama\Desktop\sdl_project\source\camera.c > CMakeFiles\main.dir\camera.c.i
 
-CMakeFiles/main.dir/block.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/block.cpp.s"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\takayama\Desktop\sdl_project\source\block.cpp -o CMakeFiles\main.dir\block.cpp.s
-
-CMakeFiles/main.dir/camera.cpp.obj: CMakeFiles/main.dir/flags.make
-CMakeFiles/main.dir/camera.cpp.obj: CMakeFiles/main.dir/includes_CXX.rsp
-CMakeFiles/main.dir/camera.cpp.obj: C:/Users/takayama/Desktop/sdl_project/source/camera.cpp
-CMakeFiles/main.dir/camera.cpp.obj: CMakeFiles/main.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\takayama\Desktop\sdl_project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/main.dir/camera.cpp.obj"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/main.dir/camera.cpp.obj -MF CMakeFiles\main.dir\camera.cpp.obj.d -o CMakeFiles\main.dir\camera.cpp.obj -c C:\Users\takayama\Desktop\sdl_project\source\camera.cpp
-
-CMakeFiles/main.dir/camera.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/main.dir/camera.cpp.i"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\takayama\Desktop\sdl_project\source\camera.cpp > CMakeFiles\main.dir\camera.cpp.i
-
-CMakeFiles/main.dir/camera.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/main.dir/camera.cpp.s"
-	C:\mingw64\bin\g++.exe $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\takayama\Desktop\sdl_project\source\camera.cpp -o CMakeFiles\main.dir\camera.cpp.s
+CMakeFiles/main.dir/camera.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/main.dir/camera.c.s"
+	C:\mingw64\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S C:\Users\takayama\Desktop\sdl_project\source\camera.c -o CMakeFiles\main.dir\camera.c.s
 
 # Object files for target main
 main_OBJECTS = \
-"CMakeFiles/main.dir/main.cpp.obj" \
-"CMakeFiles/main.dir/block.cpp.obj" \
-"CMakeFiles/main.dir/camera.cpp.obj"
+"CMakeFiles/main.dir/main.c.obj" \
+"CMakeFiles/main.dir/camera.c.obj"
 
 # External object files for target main
 main_EXTERNAL_OBJECTS =
 
-main.exe: CMakeFiles/main.dir/main.cpp.obj
-main.exe: CMakeFiles/main.dir/block.cpp.obj
-main.exe: CMakeFiles/main.dir/camera.cpp.obj
+main.exe: CMakeFiles/main.dir/main.c.obj
+main.exe: CMakeFiles/main.dir/camera.c.obj
 main.exe: CMakeFiles/main.dir/build.make
 main.exe: CMakeFiles/main.dir/linkLibs.rsp
 main.exe: CMakeFiles/main.dir/objects1.rsp
 main.exe: CMakeFiles/main.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\takayama\Desktop\sdl_project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Linking CXX executable main.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=C:\Users\takayama\Desktop\sdl_project\build\CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking C executable main.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\main.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
