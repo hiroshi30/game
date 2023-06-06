@@ -1,7 +1,7 @@
 @echo off
 
-rem rmdir build /q /s
-rem mkdir build
+rmdir build /q /s
+mkdir build
 
 cmake -S source -B build -G "MinGW Makefiles"
 cmake --build build --config Release

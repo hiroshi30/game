@@ -1,9 +1,15 @@
+#include <SDL2/SDL.h>
+#include <stdio.h>
+#include <math.h>
+#include <time.h>
+
 #include "camera.h"
 
 #define MAX_THRESHOLD 0.01
+#define pi 3.14159265
 
 
-struct Camera *Camera_create(double view_angle, double radius, double x, double y, double z, double angle_x, double angle_y, double speed) {
+struct Camera *Camera_create(double view_angle, double radius, double x, double y, double z, double angle_x, double angle_y, double speed, int window_width, int window_height) {
 	struct Camera *camera = (struct Camera *)malloc(sizeof(struct Camera));
 
 	camera->view_angle = view_angle;
@@ -16,24 +22,9 @@ struct Camera *Camera_create(double view_angle, double radius, double x, double 
     camera->radius = radius;
     camera->time1 = (struct timeval *)malloc(sizeof(struct timeval));
     camera->time2 = (struct timeval *)malloc(sizeof(struct timeval));
-	// double camera_height = tan(pi / 2 - pi * (camera->view_angle / 2) / 180) * window_width / 2;
-
-	// if (view_angle == NULL)
-    // 	camera->view_angle = 120.0;
-    // if (x == NULL)
-    // 	camera->x=0.0;
-    // if (y == NULL)
-    // 	camera->y=0.0;
-    // if (z == NULL)
-    // 	camera->z=0.0;
-    // if (angle_x == NULL)
-    // 	camera->angle_x=45.0;
-    // if (angle_y == NULL)
-    // 	camera->angle_y=0.0;
-    // if (speed == NULL)
-    // 	camera->speed=500.0;
-    // if (radius == NULL)
-    // 	camera->radius=200.0;
+    camera->window_width = window_width;
+    camera->window_height = window_height;
+	camera->camera_height = tan(pi / 2 - pi * (camera->view_angle / 2) / 180) * camera->window_width / 2;
 
 	mingw_gettimeofday(camera->time1, NULL);
 	return camera;
@@ -104,7 +95,7 @@ void Camera_draw(struct Camera *camera, SDL_Renderer *renderer) {
 	for (int iy = camera->y - 5; iy <= camera->y + 5; ++iy) {
 		for (int ix = camera->x - 5; ix <= camera->x + 5; ++ix) {
     		if ((ix - camera->x) * (ix - camera->x) + (iy - camera->y) * (iy - camera->y) <= 5 * 5) {
-    			SDL_RenderDrawPoint(renderer, ix, window_height - iy);
+    			SDL_RenderDrawPoint(renderer, ix, camera->window_height - iy);
     		}
     	}
     }
@@ -113,7 +104,7 @@ void Camera_draw(struct Camera *camera, SDL_Renderer *renderer) {
 
 void Camera_draw_line(struct Camera *camera, SDL_Renderer *renderer, double x1, double y1) {
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-	SDL_RenderDrawLine(renderer, camera->x, window_height - camera->y, x1, window_height - y1);
+	SDL_RenderDrawLine(renderer, camera->x, camera->window_height - camera->y, x1, camera->window_height - y1);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 }
 
@@ -126,8 +117,7 @@ void Camera_turn(struct Camera *camera, double x1, double y1) {
 	while (camera->angle_y >= 360) camera->angle_y -= 360;
 }
 
-double* Camera_ray_casting(struct Camera *camera) {
-	static double coords[2];
+void Camera_cast(struct Camera *camera, SDL_Renderer *renderer) {
 	double k = tan(pi * camera->angle_x / 180);
 	double l = camera->y - k * camera->x;
 	double a = k * k + 1;
@@ -135,28 +125,41 @@ double* Camera_ray_casting(struct Camera *camera) {
 	double c = camera->x*camera->x + l*l + camera->y*camera->y - 2 * l * camera->y - camera->radius*camera->radius;
 	double D = b*b - 4 * a * c;
 	
+	double x, y;
 	if (camera->angle_x == 90) {
-		coords[0] = camera->x;
-		coords[1] = camera->y + camera->radius;
+		x = camera->x;
+		y = camera->y + camera->radius;
 	} else if (camera->angle_x == 270) {
-		coords[0] = camera->x;
-		coords[1] = camera->y - camera->radius;
+		x = camera->x;
+		y = camera->y - camera->radius;
 	} else if (camera->angle_x > 90 && camera->angle_x < 270) {
-		coords[0] = (-b - sqrt(D)) / (2 * a);
-    	coords[1] = k * coords[0] + l;
+		x = (-b - sqrt(D)) / (2 * a);
+    	y = k * x + l;
 	} else {
-		coords[0] = (-b + sqrt(D)) / (2 * a);
-    	coords[1] = k * coords[0] + l;
+		x = (-b + sqrt(D)) / (2 * a);
+    	y = k * x + l;
 	}
-
-    return coords;
+	
+	Camera_draw_line(camera, renderer, x, y);
 }
 
-// double** Camera_vertex(struct Camera *camera, double vertices[][3]) {
-// 	static double *new_vertices[sizeof(vertices) / sizeof(vertices[0])];
-// 	for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); ++i) {
-// 		double l3 = camera->y - tan(pi * camera->angle_x / 180) * camera->x;
-		
+// double **Camera_projection(struct Camera *camera, int triangles_count, double triangles[][9]) {
+// 	double **polygons = malloc(3 * sizeof(double *));
+
+// 	for (int i = 0; i < triangles_count; ++i) {
+// 		polygons[i] = (double *)malloc(2 * sizeof(double *));
+// 		for (int j = 0; j < 3; ++j) {
+// 			double k1 = -tan(pi * camera->angle_x / 180);
+// 			double l1 = triangles[i][1] - k1 * triangles[i][0];
+// 			double x2 = camera->x + cos(pi * camera->angle_x / 180) * camera->camera_height;
+// 			double y2 = camera->y + sin(pi * camera->angle_x / 180) * camera->camera_height;
+// 			double l2 = y2 - k1 * x2;
+// 			double h = fabs((l2 - l1) * cos(pi * (camera->angle_x - 90) / 180));
+// 			double x = camera->x + (x2 - camera->x) * camera->camera_height / (h + camera->camera_height);
+// 			double y = camera->y + (y2 - camera->y) * camera->camera_height / (h + camera->camera_height);
+// 			polygons[i][0] = x;
+// 			polygons[i][1] = triangles[i][2];
+// 		}
 // 	}
-// 	return new_vertices;
+// 	return polygons;
 // }
