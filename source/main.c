@@ -71,6 +71,8 @@ int main(int argv, char** args) {
         }
     }
 
+    free(camera);
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
