@@ -15,23 +15,38 @@ int main(int argv, char **args) {
     SDL_Window *window = SDL_CreateWindow("test", 100, 100, window_width, window_height, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    struct Camera *camera = Camera_create(120.0, 200.0, 0.0, 0.0, 0.0, 45.0, 0.0, 650.0, window_width, window_height);
+    struct Camera *camera = Camera_create(100.0, 50.0, 0.0, 90.0, 0.0, 100.0, 200.0, 5.0, 650.0);
 
     SDL_Event event;
     bool go = true;
     bool update = true;
 
-    const int triangles_count = 1;
-    double triangles[triangles_count][9];
-    triangles[0][0] = 100;
-    triangles[0][1] = 250;
-    triangles[0][2] = 100;
-    triangles[0][3] = 200;
-    triangles[0][4] = 250;
-    triangles[0][5] = 100;
-    triangles[0][6] = 300;
-    triangles[0][7] = 250;
-    triangles[0][8] = 150;
+    const int triangles_count = 2;
+    double *triangles = malloc(triangles_count * 9 * sizeof(double));
+    triangles[0] = 100;
+    triangles[1] = 250;
+    triangles[2] = 0;
+
+    triangles[3] = 200;
+    triangles[4] = 250;
+    triangles[5] = 0;
+
+    triangles[6] = 300;
+    triangles[7] = 250;
+    triangles[8] = 100;
+
+
+    triangles[9] = 100;
+    triangles[10] = 250;
+    triangles[11] = 0;
+
+    triangles[12] = 150;
+    triangles[13] = 200;
+    triangles[14] = 250;
+
+    triangles[15] = 300;
+    triangles[16] = 250;
+    triangles[17] = 100;
 
     const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
     SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -45,67 +60,57 @@ int main(int argv, char **args) {
             if(event.type == SDL_MOUSEMOTION) {
                 Camera_turn(camera, event.motion.xrel, event.motion.yrel);
                 update = true;
-                // printf("angle_x %f, angle_y %f\n", camera->angle_x, camera->angle_y);
             }
 
             if(keyboardState[SDL_SCANCODE_W]) {
                 Camera_move_forward(camera);
                 update = true;
-                // printf("x %f, y %f\n", camera->x, camera->y);
             }
                             
             if(keyboardState[SDL_SCANCODE_S]) {
                 Camera_move_backward(camera);
                 update = true;
-                // printf("x %f, y %f\n", camera->x, camera->y);
             }
 
             if(keyboardState[SDL_SCANCODE_A]) {
                 Camera_move_left(camera);
                 update = true;
-                // printf("x %f, y %f\n", camera->x, camera->y);
             }
 
             if(keyboardState[SDL_SCANCODE_D]) {
                 Camera_move_right(camera);
                 update = true;
-                // printf("x %f, y %f\n", camera->x, camera->y);
             }
         }
 
         if (update) {
             SDL_RenderClear(renderer);
         
-            Camera_draw(camera, renderer);
-            Camera_cast(camera, renderer);
+            // Camera_draw(camera, renderer, window_height);
+            // camera->angle_x -= camera->view_angle / 2;
+            // Camera_cast(camera, renderer, window_height);
+            // camera->angle_x += camera->view_angle;
+            // Camera_cast(camera, renderer, window_height);
+            // camera->angle_x -= camera->view_angle / 2;
+            // Camera_cast(camera, renderer, window_height);
             
-            SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            for (int i = 0; i < triangles_count; ++i) {
-                for (int j = 0; j < 9; j += 3) {
-                    SDL_RenderDrawPoint(renderer, triangles[i][j], window_height - triangles[i][j + 1]);
-                }
-            }
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
-            // double **polygons = Camera_projection(camera, triangles_count, triangles);
-            // SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-            // for (int i = 0; i < 3 - 1; ++i) {
-            //     SDL_RenderDrawLine(renderer, polygons[i][0], window_height - polygons[i][1], polygons[i + 1][0], window_height - polygons[i + 1][1]);
+            // SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+            // for (int i = 0; i < triangles_count; ++i) {
+            //     for (int j = 0; j < 3; ++j) {
+            //         SDL_RenderDrawPoint(renderer, triangles[i * 9 + j * 3], window_height - triangles[i * 9 + j * 3 + 1]);
+            //     }
             // }
-            // SDL_RenderDrawLine(renderer, polygons[0][0], window_height - polygons[0][1], polygons[2][0], window_height - polygons[2][1]);
             // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-            SDL_RenderPresent(renderer);
+            Camera_projection(camera, renderer, window_width, window_height, triangles_count, triangles);
 
-            // for (int i = 0; i < 3; ++i) {
-            //     free(polygons[i]);
-            // }
-            // free(polygons);
+            SDL_RenderPresent(renderer);
 
             update = false;
         }
     }
 
+    free(triangles);
     free(camera);
 
     SDL_DestroyRenderer(renderer);
