@@ -12,16 +12,16 @@ int main(int argv, char **args) {
 
     SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_Window *window = SDL_CreateWindow("test", 100, 100, window_width, window_height, SDL_WINDOW_SHOWN);
+    SDL_Window *window = SDL_CreateWindow("main", 0, 25, window_width, window_height, SDL_WINDOW_SHOWN);
     SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-    struct Camera *camera = Camera_create(100.0, 50.0, 0.0, 90.0, 0.0, 100.0, 200.0, 5.0, 650.0);
+    struct Camera *camera = Camera_create(10.0, 10.0, 0.0, 30.0, 0.0, 100.0, 200.0, 650.0);
 
     SDL_Event event;
     bool go = true;
     bool update = true;
 
-    const int triangles_count = 2;
+    const int triangles_count = 1;
     double *triangles = malloc(triangles_count * 9 * sizeof(double));
     triangles[0] = 100;
     triangles[1] = 250;
@@ -36,17 +36,17 @@ int main(int argv, char **args) {
     triangles[8] = 100;
 
 
-    triangles[9] = 100;
-    triangles[10] = 250;
-    triangles[11] = 0;
+    // triangles[9] = 100;
+    // triangles[10] = 250;
+    // triangles[11] = 0;
 
-    triangles[12] = 150;
-    triangles[13] = 200;
-    triangles[14] = 250;
+    // triangles[12] = 150;
+    // triangles[13] = 200;
+    // triangles[14] = 250;
 
-    triangles[15] = 300;
-    triangles[16] = 250;
-    triangles[17] = 100;
+    // triangles[15] = 300;
+    // triangles[16] = 250;
+    // triangles[17] = 100;
 
     const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
     SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -84,24 +84,7 @@ int main(int argv, char **args) {
         }
 
         if (update) {
-            SDL_RenderClear(renderer);
-        
-            // Camera_draw(camera, renderer, window_height);
-            // camera->angle_x -= camera->view_angle / 2;
-            // Camera_cast(camera, renderer, window_height);
-            // camera->angle_x += camera->view_angle;
-            // Camera_cast(camera, renderer, window_height);
-            // camera->angle_x -= camera->view_angle / 2;
-            // Camera_cast(camera, renderer, window_height);
             
-            // SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-            // for (int i = 0; i < triangles_count; ++i) {
-            //     for (int j = 0; j < 3; ++j) {
-            //         SDL_RenderDrawPoint(renderer, triangles[i * 9 + j * 3], window_height - triangles[i * 9 + j * 3 + 1]);
-            //     }
-            // }
-            // SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
             Camera_projection(camera, renderer, window_width, window_height, triangles_count, triangles);
 
             SDL_RenderPresent(renderer);
