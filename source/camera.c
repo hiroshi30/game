@@ -3,30 +3,12 @@
 #include <math.h>
 #include <time.h>
 
+#include "engine.h"
 #include "camera.h"
 
 #define MAX_THRESHOLD 0.01
 #define PI 3.14159265
 
-
-double tan_sum(double tan_alpha, double tan_beta) {
-	return (tan_alpha + tan_beta) / (1 - tan_alpha / tan_beta);
-}
-
-double tan_dif(double tan_alpha, double tan_beta) {
-	return (tan_alpha - tan_beta) / (1 + tan_alpha / tan_beta);
-}
-
-void draw_circle(SDL_Renderer *renderer, int window_height, double x, double y, double radius, int r, int g, int b) {
-    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-	for (int i = y - radius; i <= y + radius; ++i) {
-		for (int j = x - radius; j <= x + radius; ++j) {
-    		if ((j - x) * (j - x) + (i - y) * (i - y) <= radius * radius) {
-    			SDL_RenderDrawPoint(renderer, j, window_height - i);
-    		}
-    	}
-    }
-}
 
 struct Camera *Camera_create(double x, double y, double z, double angle_x, double angle_y, double view_angle, double view_radius, double speed) {
 	struct Camera *camera = (struct Camera *)malloc(sizeof(struct Camera));
@@ -111,7 +93,7 @@ void Camera_turn(struct Camera *camera, double x1, double y1) {
 	while (camera->angle_y >= 360) camera->angle_y -= 360;
 }
 
-void Camera_cast(struct Camera *camera, SDL_Renderer *renderer, int window_height) {
+void Camera_cast(struct Camera *camera) {
 	double k = tan(PI * camera->angle_x / 180);
 	double l = camera->y - k * camera->x;
 	double a = k * k + 1;
@@ -134,25 +116,22 @@ void Camera_cast(struct Camera *camera, SDL_Renderer *renderer, int window_heigh
     	y = k * x + l;
 	}
 
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-	SDL_RenderDrawLine(renderer, camera->x, window_height - camera->y, x, window_height - y);
+	draw_line(camera->x, camera->y, x, y, 0, 255, 0);
 }
 
-void Camera_projection(struct Camera *camera, SDL_Renderer *renderer, int window_width, int window_height, int triangles_count, double *triangles) {
-	SDL_Vertex triangle[3];
+void Camera_projection(struct Camera *camera, int triangles_count, double *triangles) {
+	int triangle[3][2];
 
-	// SDL_SetRenderDrawColor(renderer, 135, 200, 250, 255);
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-	SDL_RenderClear(renderer);
+	// fill(135, 200, 250);
+	fill(0, 0, 0);
 
-	draw_circle(renderer, window_height, camera->x, camera->y, 5, 0, 255, 0);
-	SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+	draw_circle(camera->x, camera->y, 5, 0, 255, 0);
 	camera->angle_x += camera->view_angle / 2;
-	Camera_cast(camera, renderer, window_height);
+	Camera_cast(camera);
 	camera->angle_x -= camera->view_angle;
-	Camera_cast(camera, renderer, window_height);
+	Camera_cast(camera);
 	camera->angle_x += camera->view_angle / 2;
-	Camera_cast(camera, renderer, window_height);
+	Camera_cast(camera);
 
 	for (int i = 0; i < triangles_count; ++i) {
 		for (int j = 0; j < 3; ++j) {
@@ -197,66 +176,62 @@ void Camera_projection(struct Camera *camera, SDL_Renderer *renderer, int window
 					x = half - length2;
 				}
 			}
-			x = x / half / 2 * window_width;
+			x = x / half / 2 * WINDOW_WIDTH;
 
-			for (int xx = 0; xx < window_width; ++xx) {
-				SDL_SetRenderDrawColor(renderer, 187, 87, 223, 255);
-				SDL_RenderDrawPoint(renderer, xx, window_height - (k1 * xx + b1));
-				SDL_SetRenderDrawColor(renderer, 201, 223, 87, 255);
-				SDL_RenderDrawPoint(renderer, xx, window_height - (k2 * xx + b2));
-				SDL_SetRenderDrawColor(renderer, 249, 149, 220, 255);
-				SDL_RenderDrawPoint(renderer, xx, window_height - (k3 * xx + b3));
+			for (int xx = 0; xx < WINDOW_WIDTH; ++xx) {
+				draw_circle(xx, k1 * xx + b1, 1, 187, 87, 223);
+				draw_circle(xx, k2 * xx + b2, 1, 201, 223, 87);
+				draw_circle(xx, k3 * xx + b3, 1, 249, 0, 220);
 			}
 
-			draw_circle(renderer, window_height, x4, y4, 5, 0, 0, 255);
-			draw_circle(renderer, window_height, triangles[i * 9 + j * 3 + 0], triangles[i * 9 + j * 3 + 1], 5, 0, 0, 255);
+			draw_circle(x4, y4, 5, 0, 0, 255);
+			draw_circle(triangles[i * 9 + j * 3 + 0], triangles[i * 9 + j * 3 + 1], 5, 0, 0, 255);
 
 			// printf("angle_x %lf angle_y %lf\n", camera->angle_x, camera->angle_y);
 
-			// k1 = tan(PI * camera->angle_y / 180);
-			// k2 = -1 / k1;
-			// k3 = (triangles[i * 9 + j * 3 + 2] - camera->z) / (triangles[i * 9 + j * 3 + 1] - camera->y);
-			// k4 = tan(PI * (camera->angle_y + camera->view_angle / 2) / 180);
+			k1 = tan(PI * camera->angle_y / 180);
+			k2 = -1 / k1;
+			k3 = (triangles[i * 9 + j * 3 + 2] - camera->z) / (triangles[i * 9 + j * 3 + 1] - camera->y);
+			k4 = tan(PI * (camera->angle_y + camera->view_angle / 2) / 180);
 
-			// b1 = camera->z - k1 * camera->y;
-			// b2 = triangles[i * 9 + j * 3 + 2] - k2 * triangles[i * 9 + j * 3 + 1];
-			// b3 = camera->z - k3 * camera->y;
-			// b4 = camera->z - k4 * camera->y;
+			b1 = camera->z - k1 * camera->y;
+			b2 = triangles[i * 9 + j * 3 + 2] - k2 * triangles[i * 9 + j * 3 + 1];
+			b3 = camera->z - k3 * camera->y;
+			b4 = camera->z - k4 * camera->y;
 
-			// y2 = (b2 - b1) / (k1 - k2);
-			// z2 = k1 * y2 + b1;
+			y2 = (b2 - b1) / (k1 - k2);
+			z2 = k1 * y2 + b1;
 
-			// y4 = (b4 - b2) / (k2 - k4);
-			// z4 = k4 * y4 + b4;
+			y4 = (b4 - b2) / (k2 - k4);
+			z4 = k4 * y4 + b4;
 
-			// length1 = sqrt((z2 - camera->z) * (z2 - camera->z) + (y2 - camera->y) * (y2 - camera->y));
-			// half = tan(PI * camera->view_angle / 2 / 180) * length1;
-			// length2 = sqrt((z2 - triangles[i * 9 + j * 3 + 2]) * (z2 - triangles[i * 9 + j * 3 + 2]) + (y2 - triangles[i * 9 + j * 3 + 1]) * (y2 - triangles[i * 9 + j * 3 + 1]));
+			length1 = sqrt((z2 - camera->z) * (z2 - camera->z) + (y2 - camera->y) * (y2 - camera->y));
+			half = tan(PI * camera->view_angle / 2 / 180) * length1;
+			length2 = sqrt((z2 - triangles[i * 9 + j * 3 + 2]) * (z2 - triangles[i * 9 + j * 3 + 2]) + (y2 - triangles[i * 9 + j * 3 + 1]) * (y2 - triangles[i * 9 + j * 3 + 1]));
 			
-			// if (z2 - z4 > 0) {
-			// 	if (triangles[i * 9 + j * 3 + 2] - z2 > 0) {
-			// 		y = half + length2;
-			// 	} else {
-			// 		y = half - length2;
-			// 	}
-			// } else {
-			// 	if (triangles[i * 9 + j * 3 + 2] - z2 < 0) {
-			// 		y = half + length2;
-			// 	} else {
-			// 		y = half - length2;
-			// 	}
-			// }
-			// y = y / half / 2 * window_height;
+			if (z2 - z4 > 0) {
+				if (triangles[i * 9 + j * 3 + 2] - z2 > 0) {
+					y = half + length2;
+				} else {
+					y = half - length2;
+				}
+			} else {
+				if (triangles[i * 9 + j * 3 + 2] - z2 < 0) {
+					y = half + length2;
+				} else {
+					y = half - length2;
+				}
+			}
+			y = y / half / 2 * WINDOW_HEIGHT;
 			
-			// triangle[j] = (SDL_Vertex){{x, window_height - y}, {0, 255, 0, 255}, {0, 0}};
+			triangle[j] = (SDL_Vertex){{x, WINDOW_HEIGHT - y}, {0, 255, 0, 255}, {0, 0}};
 		}
 		
-		// SDL_RenderGeometry(renderer, NULL, triangle, 3, NULL, 0);
-
-		// SDL_SetRenderDrawColor(renderer, 200, 50, 0, 255);
-		// for (int j = 0; j < 2; ++j) {
-        // 	SDL_RenderDrawLine(renderer, triangle[j].position.x, triangle[j].position.y, triangle[j + 1].position.x, triangle[j + 1].position.y);
-    	// }
-    	// SDL_RenderDrawLine(renderer, triangle[0].position.x, triangle[0].position.y, triangle[2].position.x, triangle[2].position.y);
+		SDL_RenderGeometry(RENDERER, NULL, triangle, 3, NULL, 0);
+		draw_polygon(triangle, 3);
+		for (int j = 0; j < 2; ++j) {
+        	draw_line(triangle[j].position.x, triangle[j].position.y, triangle[j + 1].position.x, triangle[j + 1].position.y, 200, 50, 0);
+    	}
+    	draw_line(triangle[0].position.x, triangle[0].position.y, triangle[2].position.x, triangle[2].position.y, 200, 50, 0);
 	}
 }

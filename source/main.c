@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "engine.h"
 #include "camera.h"
 
 #define window_width 1000
@@ -10,10 +11,7 @@
 
 int main(int argv, char **args) {
 
-    SDL_Init(SDL_INIT_VIDEO);
-
-    SDL_Window *window = SDL_CreateWindow("main", 0, 25, window_width, window_height, SDL_WINDOW_SHOWN);
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    Engine_init(window_width, window_height);
 
     struct Camera *camera = Camera_create(10.0, 10.0, 0.0, 30.0, 0.0, 100.0, 200.0, 650.0);
 
@@ -22,31 +20,8 @@ int main(int argv, char **args) {
     bool update = true;
 
     const int triangles_count = 1;
-    double *triangles = malloc(triangles_count * 9 * sizeof(double));
-    triangles[0] = 100;
-    triangles[1] = 250;
-    triangles[2] = 0;
-
-    triangles[3] = 200;
-    triangles[4] = 250;
-    triangles[5] = 0;
-
-    triangles[6] = 300;
-    triangles[7] = 250;
-    triangles[8] = 100;
-
-
-    // triangles[9] = 100;
-    // triangles[10] = 250;
-    // triangles[11] = 0;
-
-    // triangles[12] = 150;
-    // triangles[13] = 200;
-    // triangles[14] = 250;
-
-    // triangles[15] = 300;
-    // triangles[16] = 250;
-    // triangles[17] = 100;
+    double triangles[] = {100, 250, 0, 200, 250, 0, 300, 250, 100};
+    double *ptr_triangles = triangles;
 
     const Uint8 *keyboardState = SDL_GetKeyboardState(NULL);
     SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -84,21 +59,17 @@ int main(int argv, char **args) {
         }
 
         if (update) {
-            
-            Camera_projection(camera, renderer, window_width, window_height, triangles_count, triangles);
+            Camera_projection(camera, triangles_count, ptr_triangles);
 
-            SDL_RenderPresent(renderer);
+            Engine_update();
 
             update = false;
         }
     }
 
-    free(triangles);
     free(camera);
 
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    Engine_exit();
 
     return 0;
 }
