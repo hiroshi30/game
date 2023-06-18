@@ -3,14 +3,14 @@
 
 
 struct Camera {
-	double view_angle;
 	double x;
 	double y;
 	double z;
 	double angle_x;
 	double angle_y;
-	double speed;
+	double view_angle;
 	double view_radius;
+	double speed;
 	struct timeval *time1;
 	struct timeval *time2;
 };

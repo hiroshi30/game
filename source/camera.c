@@ -120,7 +120,11 @@ void Camera_cast(struct Camera *camera) {
 }
 
 void Camera_projection(struct Camera *camera, int triangles_count, double *triangles) {
-	int triangle[3][2];
+	SDL_Vertex triangle[3];
+	// double **triangle = malloc(sizeof(double *) * 3);
+	// triangle[0] = malloc(sizeof(double) * 2);
+	// triangle[1] = malloc(sizeof(double) * 2);
+	// triangle[2] = malloc(sizeof(double) * 2);
 
 	// fill(135, 200, 250);
 	fill(0, 0, 0);
@@ -178,11 +182,14 @@ void Camera_projection(struct Camera *camera, int triangles_count, double *trian
 			}
 			x = x / half / 2 * WINDOW_WIDTH;
 
-			for (int xx = 0; xx < WINDOW_WIDTH; ++xx) {
-				draw_circle(xx, k1 * xx + b1, 1, 187, 87, 223);
-				draw_circle(xx, k2 * xx + b2, 1, 201, 223, 87);
-				draw_circle(xx, k3 * xx + b3, 1, 249, 0, 220);
-			}
+			draw_line_math(k1, b1, 187, 87, 223);
+			draw_line_math(k2, b2, 201, 223, 87);
+			draw_line_math(k3, b3, 249, 0, 223);
+			// for (int xx = 0; xx < WINDOW_WIDTH; ++xx) {
+			// 	draw_circle(xx, k1 * xx + b1, 1, 187, 87, 223);
+			// 	draw_circle(xx, k2 * xx + b2, 1, 201, 223, 87);
+			// 	draw_circle(xx, k3 * xx + b3, 1, 249, 0, 220);
+			// }
 
 			draw_circle(x4, y4, 5, 0, 0, 255);
 			draw_circle(triangles[i * 9 + j * 3 + 0], triangles[i * 9 + j * 3 + 1], 5, 0, 0, 255);
@@ -228,7 +235,7 @@ void Camera_projection(struct Camera *camera, int triangles_count, double *trian
 		}
 		
 		SDL_RenderGeometry(RENDERER, NULL, triangle, 3, NULL, 0);
-		draw_polygon(triangle, 3);
+		// draw_polygon(triangle, 3);
 		for (int j = 0; j < 2; ++j) {
         	draw_line(triangle[j].position.x, triangle[j].position.y, triangle[j + 1].position.x, triangle[j + 1].position.y, 200, 50, 0);
     	}

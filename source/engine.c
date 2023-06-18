@@ -52,3 +52,22 @@ void draw_line(double x1, double y1, double x2, double y2, int r, int g, int b) 
     SDL_SetRenderDrawColor(RENDERER, r, g, b, 255);
     SDL_RenderDrawLine(RENDERER, x1, WINDOW_HEIGHT - y1, x2, WINDOW_HEIGHT - y2);
 }
+
+void draw_line_math(double k, double l, int r, int g, int b) {
+    for (int x = 0; x < WINDOW_WIDTH; ++x) {
+        double y = k * x + l;
+        if (y >= 0 && y < WINDOW_HEIGHT) {
+            draw_line(x, y, r, g, b);
+        } else if (y >= WINDOW_HEIGHT) {
+            break;
+        }
+    }
+}
+
+void draw_polygon(int count, double **coords, int r, int g, int b) {
+    SDL_Vertex polygon[count];
+    for (int i = 0; i < count; ++i) {
+        polygon[i] = (SDL_Vertex){{coords[i][0], coords[i][1]}, {r, g, b, 255}, {0, 0}};
+    }
+    SDL_RenderGeometry(RENDERER, NULL, polygon, 3, NULL, 0);
+}
