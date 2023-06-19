@@ -1,9 +1,3 @@
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <math.h>
-#include <time.h>
-
-#include "engine.h"
 #include "camera.h"
 
 #define MAX_THRESHOLD 0.01
@@ -26,6 +20,37 @@ struct Camera *Camera_create(double x, double y, double z, double angle_x, doubl
 
 	mingw_gettimeofday(camera->time1, NULL);
 	return camera;
+}
+
+bool Camera_controls(struct Camera *camera, SDL_Event event) {
+    bool update = false;
+    
+    if(event.type == SDL_MOUSEMOTION) {
+        Camera_turn(camera, event.motion.xrel, event.motion.yrel);
+        update = true;
+    }
+
+    if(KEYBOARD_STATE[SDL_SCANCODE_W]) {
+        Camera_move_forward(camera);
+        update = true;
+    }
+                    
+    if(KEYBOARD_STATE[SDL_SCANCODE_S]) {
+        Camera_move_backward(camera);
+        update = true;
+    }
+
+    if(KEYBOARD_STATE[SDL_SCANCODE_A]) {
+        Camera_move_left(camera);
+        update = true;
+    }
+
+    if(KEYBOARD_STATE[SDL_SCANCODE_D]) {
+        Camera_move_right(camera);
+        update = true;
+    }
+
+    return update;
 }
 
 void Camera_move_forward(struct Camera *camera) {

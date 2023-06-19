@@ -1,16 +1,4 @@
-#include <SDL2/SDL.h>
-#include <math.h>
-
-#include "engine.h"
-
-
-double tan_sum(double tan_alpha, double tan_beta) {
-	return (tan_alpha + tan_beta) / (1 - tan_alpha / tan_beta);
-}
-
-double tan_dif(double tan_alpha, double tan_beta) {
-	return (tan_alpha - tan_beta) / (1 + tan_alpha / tan_beta);
-}
+#include "engine2d.h"
 
 
 void Engine_init(int window_width, int window_height) {
@@ -22,8 +10,23 @@ void Engine_init(int window_width, int window_height) {
     WINDOW_HEIGHT = window_height;
 }
 
+void Engine_keyboard_init(void) {
+    KEYBOARD_STATE = SDL_GetKeyboardState(NULL);
+}
+
+void Engine_mouse_init(void) {
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+}
+
 void Engine_update(void) {
 	SDL_RenderPresent(RENDERER);
+}
+
+bool Engine_event_exit(SDL_Event event) {
+    if(event.type == SDL_QUIT || KEYBOARD_STATE[SDL_SCANCODE_ESCAPE]) {
+        return false;
+    }
+    return true;
 }
 
 void Engine_exit(void) {
@@ -31,6 +34,7 @@ void Engine_exit(void) {
     SDL_DestroyWindow(WINDOW);
     SDL_Quit();
 }
+
 
 void fill(int r, int g, int b) {
 	SDL_SetRenderDrawColor(RENDERER, r, g, b, 255);

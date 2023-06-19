@@ -1,5 +1,5 @@
-#include <SDL2/SDL.h>
-#include <time.h>
+#include "engine2d.h"
+#include "additional_math.h"
 
 
 struct Camera {
@@ -16,6 +16,7 @@ struct Camera {
 };
 
 struct Camera *Camera_create(double x, double y, double z, double angle_x, double angle_y, double view_angle, double view_radius, double speed);
+bool Camera_controls(struct Camera *camera, SDL_Event event);
 void Camera_move_forward(struct Camera *camera);
 void Camera_move_backward(struct Camera *camera);
 void Camera_move_right(struct Camera *camera);

@@ -18,6 +18,6 @@ set(DEPENDENCIES mingw32)
 
 project(${PROJECT_NAME} LANGUAGES C)
 
-add_executable(${PROJECT_NAME} main.c camera.c engine.c)
+add_executable(${PROJECT_NAME} main.c camera.c engine2d.c additional_math.c)
 
 target_link_libraries(${PROJECT_NAME} ${DEPENDENCIES} ${LIBRARIES})

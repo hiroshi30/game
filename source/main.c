@@ -1,8 +1,3 @@
-#include <SDL2/SDL.h>
-#include <stdio.h>
-#include <stdbool.h>
-
-#include "engine.h"
 #include "camera.h"
 
 #define window_width 1000
@@ -28,34 +23,8 @@ int main(int argv, char **args) {
 
     while(go) {
         while(SDL_PollEvent(&event) != 0) {
-            if(event.type == SDL_QUIT || keyboardState[SDL_SCANCODE_ESCAPE]) {
-                go = false;
-            }
-
-            if(event.type == SDL_MOUSEMOTION) {
-                Camera_turn(camera, event.motion.xrel, event.motion.yrel);
-                update = true;
-            }
-
-            if(keyboardState[SDL_SCANCODE_W]) {
-                Camera_move_forward(camera);
-                update = true;
-            }
-                            
-            if(keyboardState[SDL_SCANCODE_S]) {
-                Camera_move_backward(camera);
-                update = true;
-            }
-
-            if(keyboardState[SDL_SCANCODE_A]) {
-                Camera_move_left(camera);
-                update = true;
-            }
-
-            if(keyboardState[SDL_SCANCODE_D]) {
-                Camera_move_right(camera);
-                update = true;
-            }
+            go = Engine_event_exit(event);
+            update = Camera_controls(camera, event);
         }
 
         if (update) {
@@ -63,7 +32,7 @@ int main(int argv, char **args) {
 
             Engine_update();
 
-            update = false;
+            update = false; 
         }
     }
 
