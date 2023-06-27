@@ -1,4 +1,17 @@
+#include <SDL2/SDL.h>
+#include <stdio.h>
+#include <math.h>
+
 #include "engine2d.h"
+
+
+int WINDOW_WIDTH;
+int WINDOW_HEIGHT;
+SDL_Window *WINDOW;
+SDL_Renderer *RENDERER;
+SDL_Event EVENT;
+const Uint8 *KEYBOARD_STATE;
+int R = 0, G = 0, B = 0, A = 255;
 
 
 void Engine_init(int window_width, int window_height) {
@@ -22,8 +35,15 @@ void Engine_update(void) {
 	SDL_RenderPresent(RENDERER);
 }
 
-bool Engine_event_exit(SDL_Event event) {
-    if(event.type == SDL_QUIT || KEYBOARD_STATE[SDL_SCANCODE_ESCAPE]) {
+bool Engine_event_status(void) {
+    if (SDL_PollEvent(&EVENT) != 0) {
+        return true;
+    }
+    return false;
+}
+
+bool Engine_event_exit() {
+    if(EVENT.type == SDL_QUIT || KEYBOARD_STATE[SDL_SCANCODE_ESCAPE]) {
         return false;
     }
     return true;
@@ -36,13 +56,18 @@ void Engine_exit(void) {
 }
 
 
-void fill(int r, int g, int b) {
-	SDL_SetRenderDrawColor(RENDERER, r, g, b, 255);
+void set_color(int r, int g, int b) {
+    R = r;
+    G = g;
+    B = b;
+    SDL_SetRenderDrawColor(RENDERER, r, g, b, 255);
+}
+
+void fill(void) {
 	SDL_RenderClear(RENDERER);
 }
 
-void draw_circle(double x, double y, double radius, int r, int g, int b) {
-    SDL_SetRenderDrawColor(RENDERER, r, g, b, 255);
+void draw_circle(double x, double y, double radius) {
 	for (int i = y - radius; i <= y + radius; ++i) {
 		for (int j = x - radius; j <= x + radius; ++j) {
     		if ((j - x) * (j - x) + (i - y) * (i - y) <= radius * radius) {
@@ -52,26 +77,22 @@ void draw_circle(double x, double y, double radius, int r, int g, int b) {
     }
 }
 
-void draw_line(double x1, double y1, double x2, double y2, int r, int g, int b) {
-    SDL_SetRenderDrawColor(RENDERER, r, g, b, 255);
+void draw_line(double x1, double y1, double x2, double y2) {
     SDL_RenderDrawLine(RENDERER, x1, WINDOW_HEIGHT - y1, x2, WINDOW_HEIGHT - y2);
 }
 
-void draw_line_math(double k, double l, int r, int g, int b) {
-    for (int x = 0; x < WINDOW_WIDTH; ++x) {
-        double y = k * x + l;
-        if (y >= 0 && y < WINDOW_HEIGHT) {
-            draw_line(x, y, r, g, b);
-        } else if (y >= WINDOW_HEIGHT) {
-            break;
-        }
+void draw_line_alpha(double k, double b) {
+    if (k >= tan(PI * 90 / 180)) {
+        draw_line(-b / k, 0, -b / k, WINDOW_HEIGHT);
+    } else {
+        draw_line(0, b, WINDOW_WIDTH, k * WINDOW_WIDTH + b);
     }
 }
 
-void draw_polygon(int count, double **coords, int r, int g, int b) {
+void draw_polygon(int count, Vector4f *vect) {
     SDL_Vertex polygon[count];
     for (int i = 0; i < count; ++i) {
-        polygon[i] = (SDL_Vertex){{coords[i][0], coords[i][1]}, {r, g, b, 255}, {0, 0}};
+        polygon[i] = (SDL_Vertex){{vect[i].x, WINDOW_HEIGHT - vect[i].y}, {R, G, B, A}, {0, 0}};
     }
-    SDL_RenderGeometry(RENDERER, NULL, polygon, 3, NULL, 0);
+    SDL_RenderGeometry(RENDERER, NULL, polygon, count, NULL, 0);
 }

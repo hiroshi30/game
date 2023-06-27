@@ -1,2 +1,4 @@
 *.exe
 build/
+libEngine.dll
+SDL2.dll
