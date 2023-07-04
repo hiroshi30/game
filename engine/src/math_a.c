@@ -1,42 +1,77 @@
+#include <stdio.h>
+
 #include "math_a.h"
 
 
-// Vector4f Vector4f_summation(Vector4f vect1, *Vector4f *vect2) {
-// 	return (Vector4f){vect1.x + vect2.x, vect1.y + vect2.y, vect1.z + vect2.z, vect1.w + vect2.w};
-// }
+void printVector3f(Vector3f *vect) {
+	printf("Vector3f {\n  %lf,\n  %lf,\n  %lf\n}\n", vect->x, vect->y, vect->z);
+}
 
-// Vector4f Vector4f_subtracting(Vector4f *vect1, Vector4f *vect2) {
-// 	return (Vector4f){vect1.x - vect2.x, vect1.y - vect2.y, vect1.z - vect2.z, vect1.w - vect2.w};
-// }
+void printVector4f(Vector4f *vect) {
+	printf("Vector4f {\n  %lf,\n  %lf,\n  %lf,\n  %lf\n}\n", vect->x, vect->y, vect->z, vect->w);
+}
 
-// Vector4f Vector3f_to_Vector4f(Vector3f *vect) {
-// 	return (Vector4f){vect.x, vect.y, vect.z, 1};
-// }
+void printMatrix(int height, int width, double *matrix) {
+	printf("Matrix {\n");
+	for (int i = 0; i < height; ++i) {
+		printf("    {");
+		for (int j = 0; j < width; ++j) {
+			printf("%lf, ", matrix[i * width + j]);
+		}
+		printf(" },\n");
+	}
+	printf("}\n");
+}
 
-// Vector4f Vector4f_normalize(Vector4f *vect) {
-// 	return (Vector4f){vect.x / vect.w, vect.y / vect.w, vect.z / vect.w, 1};
-// }
+void Vector4f_summation(Vector4f *vect1, Vector4f *vect2, Vector4f *vect3) {
+	vect3->x = vect1->x + vect2->x;
+	vect3->y = vect1->y + vect2->y;
+	vect3->z = vect1->z + vect2->z;
+	vect3->w = vect1->w + vect2->w;
+}
 
-// Vector4f Vector4f_mul_Matrix(Vector4f *vect, Matrix *matrix) {
-// 	return (Vector4f){
-// 		vect.x * matrix.values[0] + vect.y * matrix.values[1] + vect.z * matrix.values[2] + vect.w * matrix.values[3],
-// 		vect.x * matrix.values[4] + vect.y * matrix.values[5] + vect.z * matrix.values[6] + vect.w * matrix.values[7],
-// 		vect.x * matrix.values[8] + vect.y * matrix.values[9] + vect.z * matrix.values[10] + vect.w * matrix.values[11],
-// 		vect.x * matrix.values[12] + vect.y * matrix.values[13] + vect.z * matrix.values[14] + vect.w * matrix.values[15]
-// 	};
-// }
+void Vector4f_subtracting(Vector4f *vect1, Vector4f *vect2, Vector4f *vect3) {
+	vect3->x = vect1->x - vect2->x;
+	vect3->y = vect1->y - vect2->y;
+	vect3->z = vect1->z - vect2->z;
+	vect3->w = vect1->w - vect2->w;
+}
 
-// Vector3f Vector3f_mul_Matrix(Vector3f *vect, Matrix *matrix) {
-// 	Vector3f newVect;
+void Vector3f_to_Vector4f(Vector3f *vect1, Vector4f *vect2) {
+	vect2->x = vect1->x;
+	vect2->y = vect1->y;
+	vect2->z = vect1->z;
+	vect2->w = 1;
+}
 
-// 	newVect.x = vect.x * matrix.values[0][0] + vect.y * matrix.values[0][1] + vect.z * matrix.values[0][2] + vect.w * matrix.values[0][3];
-// 	newVect.y = vect.x * matrix.values[1][0] + vect.y * matrix.values[1][1] + vect.z * matrix.values[1][2] + vect.w * matrix.values[1][3];
-// 	newVect.z = vect.x * matrix.values[2][0] + vect.y * matrix.values[2][1] + vect.z * matrix.values[2][2] + vect.w * matrix.values[2][3];
-// 	double w = vect.x * matrix.values[3][0] + vect.y * matrix.values[3][1] + vect.z * matrix.values[3][2] + vect.w * matrix.values[3][3]; 
+void Vector4f_normalize(Vector4f *vect1, Vector4f *vect2) {
+	vect2->x = vect1->x / vect1->w;
+	vect2->y = vect1->y / vect1->w;
+	vect2->z = vect1->z / vect1->w;
+	vect2->w = 1;
+}
 
-// 	newVect.x /= w;
-// 	newVect.y /= w;
-// 	newVect.z /= w;
+void Vector4f_mul_Matrix(Vector4f *vect1, double *matrix, Vector4f *vect2) {
+	double x, y, z, w;
 
-// 	return newVect;
+	x = vect1->x * matrix[0] + vect1->y * matrix[1] + vect1->z * matrix[2] + vect1->w * matrix[3];
+	y = vect1->x * matrix[4] + vect1->y * matrix[5] + vect1->z * matrix[6] + vect1->w * matrix[7];
+	z = vect1->x * matrix[8] + vect1->y * matrix[9] + vect1->z * matrix[10] + vect1->w * matrix[11];
+	w = vect1->x * matrix[12] + vect1->y * matrix[13] + vect1->z * matrix[14] + vect1->w * matrix[15];
+
+	vect2->x = x;
+	vect2->y = y;
+	vect2->z = z;
+	vect2->w = w;
+}
+
+// void Vector3f_mul_Matrix(Vector3f *vect1, Matrix *matrix, Vector3f *vect2) {
+// 	vect2->x = vect1->x * matrix[0] + vect1->y * matrix[1] + vect1->z * matrix[2] + 1 * matrix[3];
+// 	vect2->y = vect1->x * matrix[4] + vect1->y * matrix[5] + vect1->z * matrix[6] + 1 * matrix[7];
+// 	vect2->z = vect1->x * matrix[8] + vect1->y * matrix[9] + vect1->z * matrix[10] + 1 * matrix[11];
+// 	double w = vect1->x * matrix[12] + vect1->y * matrix[13] + vect1->z * matrix[14] + 1 * matrix[15];
+
+// 	vect2->x /= w;
+// 	vect2->y /= w;
+// 	vect2->z /= w;
 // }

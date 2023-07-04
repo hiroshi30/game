@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <SDL2/SDL.h>
 
 #include "engine2d.h"
 #include "camera.h"
@@ -116,11 +117,11 @@ void Camera_move_left(Camera *camera) {
 	camera->time1->tv_usec = camera->time2->tv_usec;
 }
 
-void Camera_turn(Camera *camera, double x1, double y1) {
-	camera->angle_x -= x1;
+void Camera_turn(Camera *camera, double delta_x, double delta_y) {
+	camera->angle_x -= delta_x;
 	while (camera->angle_x < 0) camera->angle_x += 360;
 	while (camera->angle_x >= 360) camera->angle_x -= 360;
-	camera->angle_y -= y1;
+	camera->angle_y -= delta_y;
 	if (camera->angle_y >= 90) camera->angle_y = 89;
 	if (camera->angle_y <= -90) camera->angle_y = -89;
 }
@@ -160,7 +161,7 @@ void Camera_exit(Camera *camera) {
 
 // 	for (int i = 0; i < count; ++i) {
 // 		for (int j = 0; j < 3; ++j) {
-// 			triangle.points[j] = Vector3F_mul_Matrix(mesh->triangles[i].points[j], perspectiveProjectionMatrix);
+// 			triangle.points[j] = Vector3F_mul_Matrix(vect[i * 3 + j], perspectiveProjectionMatrix);
 // 		}
 		
 // 		// set_color(0, 255, 0);
@@ -177,15 +178,17 @@ void Camera_exit(Camera *camera) {
 
 
 
-void Camera_perspective_projection(Camera *camera, Mesh *mesh) {
-	Vector4f *triangle = malloc(sizeof(Vector4f) * 3);
+void Camera_perspective_projection(Camera *camera, int count, Vector3f *triangles) {
+	Vector4f **triangle = malloc(sizeof(Vector4f *) * 3);
+	for (int i = 0; i < 3; ++i)
+		triangle[i] = (Vector4f *)malloc(sizeof(Vector4f));
 
 	// fill(135, 200, 250);
 	set_color(0, 0, 0);
 	fill();
 
 	// aspecrt ratio
-	double a = WINDOW_HEIGHT / WINDOW_WIDTH;
+	double a = (double)WINDOW_HEIGHT / (double)WINDOW_WIDTH;
 
 	// field of view scaling factor
 	double f = 1 / tan(PI * camera->view_angle_x / 2 / 180);
@@ -196,19 +199,50 @@ void Camera_perspective_projection(Camera *camera, Mesh *mesh) {
 	// newY = f * y / z;
 	// newZ = lambda * z - lambda * znear;
 
-	for (int i = 0; i < mesh->count; ++i) {
+	printf("a %lf f %lf lambda %lf\n", a, f, lambda);
+
+	double matrix[] = {
+		a * f, 0, 0, 0,
+		0, f, 0, 0,
+		0, 0, lambda, -camera->z_near * lambda,
+		0, 0, 1, 0
+	};
+	double *ptr_matrix = matrix;
+
+	printMatrix(4, 4, ptr_matrix);
+
+	for (int i = 0; i < count; ++i) {
 		for (int j = 0; j < 3; ++j) {
-			triangle[j].x = a * f * mesh->triangles[i].points[j].x / mesh->triangles[i].points[j].z;
-			triangle[j].y = f * mesh->triangles[i].points[j].y / mesh->triangles[i].points[j].z;
-			triangle[j].z = (lambda * mesh->triangles[i].points[j].z - lambda * camera->z_near) / mesh->triangles[i].points[j].z;
-		}
+			printVector3f(&triangles[i * 3 + j]);d
+			Vector3f_to_Vector4f(&triangles[i * 3 + j], triangle[j]);
+			Vector4f_mul_Matrix(triangle[j], ptr_matrix, triangle[j]);
+			Vector4f_normalize(triangle[j], triangle[j]);
+			printVector4f(triangle[j]);
+
+
+			// triangle[j].x = a * f * triangles[i * 3 + j].x / triangles[i * 3 + j].z;
+			// triangle[j].y = f * triangles[i * 3 + j].y / triangles[i * 3 + j].z;
+			// triangle[j].z = (lambda * triangles[i * 3 + j].z - lambda * camera->z_near) / triangles[i * 3 + j].z;
+			
+			// // triangle[j].x += 1;
+			// // triangle[j].x /= 2;
+			// triangle[j].x *= WINDOW_WIDTH;
+
+			// // triangle[j].y += 1;
+			// // triangle[j].y /= 2;
+			// triangle[j].y *= WINDOW_HEIGHT;
 		
+			printf("i %d j %d x0 %lf y0 %lf x %lf y %lf\n", i, j, triangles[i * 3 + j].x, triangles[i * 3 + j].y, triangle[j]->x, triangle[j]->y);
+		}
+
 		set_color(200, 50, 0);
 		for (int j = 0; j < 2; ++j) {
-        	draw_line(triangle[j].x, triangle[j].y, triangle[j + 1].x, triangle[j + 1].y);
+        	draw_line(triangle[j]->x, triangle[j]->y, triangle[j + 1]->x, triangle[j + 1]->y);
     	}
-    	draw_line(triangle[0].x, triangle[0].y, triangle[2].x, triangle[2].y);
+    	draw_line(triangle[0]->x, triangle[0]->y, triangle[2]->x, triangle[2]->y);
 	}
 
+	for (int i = 0; i < 3; ++i)
+		free(triangle[i]);
 	free(triangle);
 }

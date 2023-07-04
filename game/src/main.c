@@ -10,31 +10,34 @@
 
 int main(int argv, char **args) {
 
-    Triangle triangles[] = {
-        {
-            (Vector3f){100, 250, 0},
-            (Vector3f){200, 250, 0},
-            (Vector3f){300, 250, 100}
-        }
-    };
-    Triangle *ptr_triangles = triangles;
+    int count = 1;
 
-    Mesh *mesh = malloc(sizeof(Mesh));
-    mesh->count = 1;
-    mesh->triangles = ptr_triangles;
-    
+    Vector3f triangles[] = {
+        (Vector3f){100, 250, 0},
+        (Vector3f){200, 250, 0},
+        (Vector3f){300, 250, 100}
+    };
+
+    // Vector3f triangles[] = {
+    //     (Vector3f){0.0f, 0.0f, 1.0f},
+    //     (Vector3f){0.5f, 1.0f, 1.0f},
+    //     (Vector3f){1.0f, 0.0f, 1.0f},
+    // };
+
+    Vector3f *ptr_triangles = triangles;
+
     Engine_init(window_width, window_height);
     Engine_keyboard_init();
     Engine_mouse_init();
 
-    Camera *camera = Camera_create(120, 10, 0, 30, 10, 100, 1, 200, 650);
+    Camera *camera = Camera_create(0, 0, 0, 30, 10, 100, 0.1, 1000, 650);
 
     bool go = true;
     bool update = true;
 
     while(go) {
         if (update) {
-            Camera_perspective_projection(camera, mesh);
+            Camera_perspective_projection(camera, count, ptr_triangles);
 
             Engine_update();
 
@@ -49,7 +52,6 @@ int main(int argv, char **args) {
 
     Camera_exit(camera);
     Engine_exit();
-    free(mesh);
 
     return 0;
 }

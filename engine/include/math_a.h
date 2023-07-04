@@ -3,31 +3,22 @@
 #define PI 3.14159265
 
 
-typedef struct Matrix {
-	int height;
-	int width;
-	double *values;
-} Matrix;
-
 typedef struct Vector3f {
 	double x, y, z;
 } Vector3f;
+
+void printVector3f(Vector3f *vect);
 
 typedef struct Vector4f {
 	double x, y, z, w;
 } Vector4f;
 
-typedef struct Triangle {
-	Vector3f points[3];
-} Triangle;
+void printVector4f(Vector4f *vect);
 
-typedef struct Mesh {
-	int count;
-	Triangle *triangles;
-} Mesh;
+void printMatrix(int height, int width, double *matrix);
 
-// Vector4f Vector4f_summation(Vector4f *vect1, Vector4f *vect2);
-// Vector4f Vector4f_subtracting(Vector4f *vect1, Vector4f *vect2);
-// Vector4f Vector3f_to_Vector4f(Vector3f *vect);
-// Vector4f Vector4f_normalize(Vector4f *vect);
-// Vector4f Vector4f_mul_Matrix(Vector4f *vect, Matrix *matrix);
+void Vector4f_summation(Vector4f *vect1, Vector4f *vect2, Vector4f *vect3);
+void Vector4f_subtracting(Vector4f *vect1, Vector4f *vect2, Vector4f *vect3);
+void Vector3f_to_Vector4f(Vector3f *vect1, Vector4f *vect2);
+void Vector4f_normalize(Vector4f *vect1, Vector4f *vect2);
+void Vector4f_mul_Matrix(Vector4f *vect1, double *matrix, Vector4f *vect2);

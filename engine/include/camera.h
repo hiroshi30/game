@@ -1,6 +1,5 @@
 #include <stdbool.h>
 #include <time.h>
-#include <SDL2/SDL.h>
 
 #include "math_a.h"
 
@@ -20,4 +19,4 @@ void Camera_move_left(Camera *camera);
 void Camera_turn(Camera *camera, double x1, double y1);
 void Camera_exit(Camera *camera);
 
-void Camera_perspective_projection(Camera *camera, Mesh *mesh);
+void Camera_perspective_projection(Camera *camera, int count, Vector3f *triangles);
