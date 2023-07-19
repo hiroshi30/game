@@ -1,4 +1,4 @@
-main.exe
 build/
-libEngine.dll
 SDL2.dll
+libengine.dll
+main.exe

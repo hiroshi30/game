@@ -1,8 +1,4 @@
-#include "math_a.h"
-#include "engine2d.h"
-#include "camera.h"
-#include "globals.h"
-
+#include "engine.h"
 
 #define window_width 16 * 70
 #define window_height 9 * 70
@@ -27,8 +23,6 @@ int main(int argv, char **args) {
     Vector3f *ptr_triangles = triangles;
 
     Engine_init(window_width, window_height);
-    Engine_keyboard_init();
-    Engine_mouse_init();
 
     Camera *camera = Camera_create(0, 0, 0, 30, 10, 100, 0.1, 1000, 650);
 

@@ -21,13 +21,9 @@ void Engine_init(int window_width, int window_height) {
     RENDERER = SDL_CreateRenderer(WINDOW, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     WINDOW_WIDTH = window_width;
     WINDOW_HEIGHT = window_height;
-}
-
-void Engine_keyboard_init(void) {
+    
     KEYBOARD_STATE = SDL_GetKeyboardState(NULL);
-}
 
-void Engine_mouse_init(void) {
     SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 

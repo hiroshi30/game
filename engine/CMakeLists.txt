@@ -1,23 +1,29 @@
-target_compile_options(Engine PRIVATE -Wall -Wextra -Wpedantic)
+target_compile_options(engine PRIVATE
+	-Wall
+	-Wextra
+	-Wpedantic
+)
 
-target_compile_features(Engine PRIVATE c_std_23)
+target_compile_features(engine PRIVATE
+	c_std_23
+)
 
-target_sources(Engine PRIVATE
-	src/math_a.c
+target_sources(engine PRIVATE
+	src/library.c
 	src/engine2d.c
 	src/camera.c
 )
 
-target_include_directories(Engine PRIVATE
-	${SDL_PATH}/include
+target_include_directories(engine PRIVATE
+	../${SDL_PATH}/include
 	include
 )
 
-target_link_directories(Engine PRIVATE
-	${SDL_PATH}/lib
-	)
+target_link_directories(engine PRIVATE
+	../${SDL_PATH}/lib
+)
 
-target_link_libraries(Engine
+target_link_libraries(engine
 	${DEPENDENCIES}
 	${LIBRARIES}
 )

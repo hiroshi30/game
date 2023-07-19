@@ -1,7 +1,7 @@
 #include <stdbool.h>
 #include <time.h>
 
-#include "math_a.h"
+#include "library.h"
 
 
 typedef struct Camera {

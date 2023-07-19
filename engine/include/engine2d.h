@@ -1,11 +1,9 @@
 #include <stdbool.h>
 
-#include "math_a.h"
+#include "library.h"
 
 
 void Engine_init(int window_width, int window_height);
-void Engine_keyboard_init(void);
-void Engine_mouse_init(void);
 void Engine_update(void);
 bool Engine_event_status(void);
 bool Engine_event_exit(void);
